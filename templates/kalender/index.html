@@ -1,0 +1,83 @@
+{% load static %}{% spaceless %}<!doctype html>
+<html lang="da">
+  <head>
+	<title>Kalender for {{ year }} med ugenumre og helligdage</title>
+	<meta name="description" content="Kalender for {{ year }} med ugenumre og helligdage. Overblik over et halvt eller et helt år ad gangen.">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="{% static "kalender/style.css" %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#ffc40d">
+	<meta name="theme-color" content="#ffffff">
+  </head>
+  <body>
+
+{% if period|length == 12 %}
+{% if not year == "1" %}<a href="{% url 'kal_year' previous %}" title="Se kalender for året før">« forrige</a>{% endif %}<h1> Kalender for år {{ year }} </h1>{% if not year == "9999" %}<a href="{% url 'kal_year' next %}" title="Se kalender for året efter">næste »</a>{% endif %} <a class="calendartype" href="{% if now|date:"n" == "7" or now|date:"n" == "8" or now|date:"n" == "9" or now|date:"n" == "9" or now|date:"n" == "10" or now|date:"n" == "11" or now|date:"n" == "12" and now|date:"Y" == year %}{% url 'kal_period' year 2 %}{% else %}{% url 'kal_period' year 1 %}{% endif %}" title="Gå til halvårskalender">Til halvårskalender</a>
+{% elif period|last == 6 %}
+{% if not year == "1" %}<a href="{% url 'kal_period' previous 2 %}" title="Se kalender for halvåret før">« forrige </a>{% endif %}<h1> Kalender for år {{ year }}, første halvår </h1><a href="{% url 'kal_period' year 2 %}" title="Se kalender for halvåret efter">næste »</a> <a class="calendartype" href="{% url 'kal_year' year %}" title="Gå til helårskalender">Til helårskalender</a>
+{% else %}
+<a href="{% url 'kal_period' year 1 %}" title="Se kalender for halvåret før">« forrige</a><h1> Kalender for år {{ year }}, andet halvår </h1>{% if not year == "9999" %}<a href="{% url 'kal_period' next 1 %}" title="Se kalender for halvåret efter">næste »</a>{% endif %} <a class="calendartype" href="{% url 'kal_year' year %}" title="Gå til helårskalender">Til helårskalender</a>
+{% endif %}
+
+<p>I dag er det {{ now|date:"l" }} den {{ now|date }} i uge {{ now|date:"W" }}</p>
+
+<table>
+	<thead>
+		<tr>
+		{% if period|length == 12 %}
+			<th>Januar</th>
+			<th>Februar</th>
+			<th>Marts</th>
+			<th>April</th>
+			<th>Maj</th>
+			<th>Juni</th>
+			<th>Juli</th>
+			<th>August</th>
+			<th>September</th>
+			<th>Oktober</th>
+			<th>November</th>
+			<th>December</th>
+		{% elif period|last == 6 %}	
+			<th>Januar</th>
+			<th>Februar</th>
+			<th>Marts</th>
+			<th>April</th>
+			<th>Maj</th>
+			<th>Juni</th>
+		{% else %}
+			<th>Juli</th>
+			<th>August</th>
+			<th>September</th>
+			<th>Oktober</th>
+			<th>November</th>
+			<th>December</th>		
+		{% endif %}	
+		</tr>
+	</thead>
+	<tbody>
+	{% for month, monthdays in dates_in_year.items %}
+		<tr>
+		{% for day in monthdays %}
+			<td{% if day.1 == "Helligdag" or day.0|date:"w" == "0" %} class="holy{% if day.3 %} {{ day.3 }}{% endif %}"{% elif day == "NON-EXISTING DATE" %} class="noborder"{% elif year == now|date:"Y" and day.3 %} class="{{ day.3 }}"{% endif %}>
+			
+				<div title="{{ day.0|date:"l"|capfirst }}" class="weekday{% if day.0|date:"w" == "6" %} saturday{% endif %}{% if day.0|date == now|date %} red{% endif %}">{{ day.0|date:"D"|slice:":1"|upper }}</div>
+	
+				<div class="datenum{% if day.0|date:"w" == "6" %} saturday{% endif %}{% if day.0|date == now|date %} red{% endif %}">{{ day.0|date:"j" }}</div>
+
+				{% if day.0|date:"w" == "1" %}<div title="Uge {{ day.0|date:"W" }}" class="weeknum{% if day.0|date:"Y W" == now|date:"Y W" %} red{% endif %}">{{ day.0|date:"W" }}</div>{% endif %}
+
+				{% if day.1 == "Helligdag" or day.1 == "Særlig dag" %}<div title="{{ day.2 }}" class="named{% if "/" in day.2 and period|length == 12 %} named-small{% endif %}{% if day.0|date == now|date %} red{% endif %}">{{ day.2 }}</div>{% endif %}
+				
+			</td>
+		{% endfor %}	
+	</tr>
+	{% endfor %}	
+	</tbody>
+</table>
+</body>
+</html>{% endspaceless %}

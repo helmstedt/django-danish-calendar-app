@@ -1,0 +1,95 @@
+body { 
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	text-align: center;
+	font-size: 1.8vmin;
+	font-weight: 100;
+	background-color: white;
+}
+h1 {
+	display: inline;
+	margin-top: 0;
+	font-size: 2em;
+	font-weight: 300;
+	margin-bottom: 0.1em;
+}
+a {
+	text-decoration: none;
+	color: grey;
+	font-weight: 500;
+	font-size: 1.2em;
+}
+a.calendartype {
+	position: absolute;
+	right: 0.5em;
+	top: 0.2em;
+}	
+p {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	font-size: 1.3em;
+}
+table {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+th {
+	font-weight: 600;
+	padding-bottom: 0.3em;
+	{% if period|length == 12 %}font-size: 0.9em;{% else %}font-size: 1.2em;{% endif %}		
+}
+td {
+	border-width: thin;
+	border-style: solid;
+	border-color: #757070;
+	text-align: left;
+	padding: 0px;
+	white-space: nowrap;
+	overflow: hidden;
+	line-height: 1.45em;
+}
+td.noborder {
+	border-width: 0px;
+}
+div.weekday {
+	float: left;
+	padding-left: 0.2em;
+	width: 0.6em;
+	text-align: left;
+}
+div.datenum {
+	float: left;
+	text-align: right;
+	width: 1.4em;
+	padding-right: 0.2em;
+	margin-right: 0.2em;
+}
+div.named {
+	{% if period|length == 12 %}font-size: 0.75em;{% endif %}
+}
+div.named-small {
+	font-size: 0.61em;
+}
+div.weeknum {
+	float: right;
+	font-weight: 400;
+	padding-right: 0.2em;
+}
+.holy, .saturday {
+	background-color: #c6c5be;
+}
+.redtop {
+	border-top-color: red;
+}
+.redbottom {
+	border-bottom-color: red;
+}
+.redleft {
+	border-left-color: red;
+}	
+.redright {
+	border-right-color: red;
+}
+.red {
+	color: red;
+}
